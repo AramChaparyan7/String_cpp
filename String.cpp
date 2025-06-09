@@ -2,7 +2,8 @@
 #include <cstddef>
 #include "head.hpp"
 
-String::String() : size_(0){}
+String::String() : size_(0), data_(nullptr){}
+
 String::String(const char* str){
 	const char* tmp = str;
 	while(*tmp){
@@ -19,6 +20,43 @@ String::String(const char* str){
 String::~String(){
 	size_ = 0;
 	delete[]  data_;
+}
+
+String::String(const String& other){
+	size_ = other.size_;
+	data_ = new char[size_+1];
+	for(int i = 0; i < size_+1; ++i){
+		data_[i] = other.data_[i];
+	}
+}
+
+String::String(String && other){
+	size_ = other.size_;
+	data_ = other.data_;
+	other.data_ = nullptr;
+}
+
+String& String::operator= (String&& other){
+	if(this == &other){
+		return *this;
+	}
+	delete[] data_;
+	size_ = other.size_;
+	data_ = other.data_;
+	other.data_ = nullptr;
+	return *this;
+}
+
+String& String::operator= (const String& other){
+	if(this == &other){
+		return *this;
+	}
+	size_ = other.size_;
+	data_ = new char[size_+1];
+	for(int i = 0; i < size_+1; ++i){
+		data_[i] = other.data_[i];
+	}
+	return *this;
 }
 
 size_t String::Length() const{
