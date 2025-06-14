@@ -59,6 +59,46 @@ String& String::operator= (const String& other){
 	return *this;
 }
 
+String String::operator+ (const String& rhs){
+	String tmp;
+	tmp.size_ = rhs.size_ + this->size_;
+	tmp.data_ = new char[tmp.size_ + 1];
+	for(int i = 0; i < this->size_; ++i){
+		tmp[i] = this->data_[i];
+	}
+	for(int i = 0; i < rhs.size_; ++i){
+		tmp[this->size_ + i] = rhs[i];
+	}
+    tmp[tmp.size_] = '\0';	
+	return tmp;
+}
+
+String String::operator+ (const char* rhs){
+	return *this + String(rhs);
+}
+
+String operator+ (const char* lhs, const String& rhs){
+	return String(lhs) + rhs;
+}
+
+std::ostream& operator<< (std::ostream& os, const String& str){
+	os << str.data_;
+	return os;
+}
+
+std::istream& operator>> (std::istream& is, String& str){
+	is >> str.data_;
+	return is;
+}
+
+char& String::operator[] (size_t index){
+	return data_[index];
+}
+
+const char& String::operator[] (size_t index) const{
+	return data_[index];
+}
+
 size_t String::Length() const{
 	return size_;
 }
